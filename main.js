@@ -1,5 +1,6 @@
 const Discord= require('Discord.js');
 const ytdl = require('ytdl-core');
+const fs = require('fs')
 const {
 	prefix,
 	token,
@@ -131,16 +132,13 @@ function play(guild, song) {
         return;
     }
   
-    const dispatcher = serverQueue.connection
-      .play(ytdl(song.url))
-      .on("finish", () => {
+    const dispatcher = serverQueue.connection.play(ytdl(song.url)).on("finish", () => {
         serverQueue.songs.shift();
         play(guild, serverQueue.songs[0]);
-      })
-      .on("error", error => console.error(error));
+    }).on("error", error => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
     serverQueue.textChannel.send(`Start playing: **${song.title}**`);
-  }
+}
 
 
 
